@@ -9,4 +9,4 @@ services:
 before_script: pip install docker-compose
 # run command test in container django
 script:
-  - docker-compose run app sh -c "pytest ./tests/ && flake8"
+  - docker-compose run app sh -c "pytest && flake8"
