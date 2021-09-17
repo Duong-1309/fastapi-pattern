@@ -1,0 +1,41 @@
+version: "3.8"
+services: 
+  app:
+    container_name: ghoul_api
+    build: 
+      context: .
+    working_dir: /usr/app
+    environment: 
+      DB_HOST: mongo
+      DB_PORT: 27017
+      RABBITMQ: null
+      DEBUG: 1
+      CLOUDINARY_URL: null    # your-cloudinary-url-for-using-cdn
+      SENDGRID_API_KEY: null  # your-api-key
+      REMOTE_MONGO_URL: null  # your-remote-mongo-url
+      REMOTE_POSTGRES_URL: null # your-remote-postgres-url
+    ports: 
+      - 8000:8000
+    volumes: 
+      - .:/usr/app
+    command: >
+      sh -c "bash ./entrypoint.sh"
+    depends_on: 
+      - mongo
+    
+  mongo:
+    image: mongo:latest
+    container_name: shoul_mongo
+    restart: on-failure
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootghouldb2021
+    ports: 
+      - 47017:27017
+    expose: 
+      - 27017
+    volumes: 
+      - mongo_db:/data/db
+    
+volumes: 
+  mongo_db:
