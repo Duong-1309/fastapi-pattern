@@ -1,5 +1,6 @@
 # fastapi-pattern
 Sample project FastAPI
+
 Technology used:
  - FastAPI, PyMongo
  - Docker, docker-compose
