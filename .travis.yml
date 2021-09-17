@@ -6,7 +6,9 @@ python:
 services:
    - docker
 # install docker-compose
-before_script: pip install docker-compose
+before_script:
+  - pip install docker-compose
+  - docker-compose build
 # run command test in container django
 script:
   - docker-compose run app sh -c "pytest && flake8"
