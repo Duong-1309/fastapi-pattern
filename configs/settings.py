@@ -9,8 +9,11 @@ from pymongo import MongoClient
 
 from .tags import TAGS
 
+# using lib openssl with command "openssl rand -hex 32"
+PROJECT_SECRET_KEY = '4fc9ddfb759d191722e3d4b9814a578232780320e4a8a9f41da3866b7ff81af5'
 
 DEBUG = os.environ.get('DEBUG', 0)
+
 PROJECT_TITLE = 'Project sample FastAPI'
 __VERSION__='1.0'
 DESCRIPTION='Project sample used FastAPI and PyMongo'
@@ -79,10 +82,20 @@ REMOTE_MONGO_URL = os.environ.get('REMOTE_MONGO_URL')
 
 REMOTE_POSTGRES_URL = os.environ.get('REMOTE_POSTGRES_URL')
 
+CELERY_APP_NAME = 'celery_app'
+
 MONGO_CLIENT = None
 
 if all([DB_HOST, DB_PORT]):
     # Initital connection to database
     MONGO_CLIENT = MongoClient(
-        f'mongodb://root:{urllib.parse.quote("ghouldb2021")}@{DB_HOST}:{DB_PORT}/?authMechanism=SCRAM-SHA-256'
+        f'mongodb://root:{urllib.parse.quote("rootghouldb2021")}@{DB_HOST}:{DB_PORT}/?authMechanism=SCRAM-SHA-256'
     )
+    if not MONGO_CLIENT['schedule'].command('usersInfo', usersInfo={"user": "root", "db": "schedule"}):
+        MONGO_CLIENT['schedule'].command(
+            'createUser',
+            createUser='root',
+            pwd='rootghouldb2021',
+            roles=["readWrite", "dbAdmin"],
+            mechanisms=["SCRAM-SHA-256"],
+        )
